@@ -7,196 +7,82 @@
     - name: Disable dpkg fsync
       shell: test -e /etc/dpkg/dpkg.cfg.d/unsafe-io || echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/unsafe-io
 
+    - name: Add x2go user
+      user:
+        name: x2go
+        comment: X2Go User
+        group: users
+        generate_ssh_key: yes
+        shell: /bin/bash
+
+    - name: Add x2go key
+      apt_key:
+        id: E1F958385BFE2B6E
+        keyserver: keys.gnupg.net
+
+    - name: Add x2go repo
+      apt_repository: 
+        repo: deb http://packages.x2go.org/debian stretch extras main
+        state: present
+
+    - name: Upgrade
+      apt:
+        update_cache: yes
+        upgrade: yes
+
     - name: Install required debs
       apt:
         name: "{{ item }}"
         state: present
       with_items:
-        - unzip
+        - mate-desktop
+        - x2goserver
+        - mate-session-manager
+        - mate-applets
+        - mate-backgrounds
+        - mate-control-center
+        - jmeter
+        - jmeter-http
+        - dconf-cli
+        - firefox-esr
+    
+    - name: Copy check_wallpaper.sh
+      copy:
+        src: files/check_wallpaper.sh
+        dest: /usr/local/bin
+        mode: 755
 
-# [
-#     {
-#         "hosts": "all",
-#         "gather_facts": "false",
-#         "remote_user": "root",
-#         "tasks": [
-#             {
-#                 "name": "Update",
-#                 "raw": "apt-get -y --allow-unauthenticated update || true"
-#             },
-#             {
-#                 "name": "Ensure python is available",
-#                 "raw": "test -e /usr/bin/python || apt install -y --allow-unauthenticated python-minimal"
-#             },
-#             {
-#                 "name": "Ensure python-apt is available",
-#                 "raw": "test -d /usr/share/python-apt || apt install -y --allow-unauthenticated python-apt"
-#             },
-#             {
-#                 "name": "Upgrade",
-#                 "raw": "apt-get -y --allow-unauthenticated upgrade"
-#             }
-#         ]
-#     },
-#     {
-#         "hosts": "mate",
-#         "remote_user": "root",
-#         "tasks": [
-#             {
-#                 "name": "add x2go user",
-#                 "user": {
-#                     "name": "x2go",
-#                     "comment": "X2GO User",
-#                     "group": "users",
-#                     "generate_ssh_key": "yes",
-#                     "shell": "/bin/bash"
-#                 }
-#             },
-#             {
-#                 "name": "install dirmngr",
-#                 "apt": {
-#                     "name": "dirmngr",
-#                     "allow_unauthenticated": "yes"
-#                 }
-#             },
-#             {
-#                 "name": "add x2go repo key",
-#                 "apt_key": {
-#                     "keyserver": "keys.gnupg.net",
-#                     "id": "E1F958385BFE2B6E"
-#                 }
-#             },
-#             {
-#                 "name": "add x2go repo",
-#                 "apt_repository": {
-#                     "repo": "deb http://packages.x2go.org/debian stretch extras main",
-#                     "state": "present"
-#                 }
-#             },
-#             {
-#                 "name": "upgrade all",
-#                 "apt": {
-#                     "allow_unauthenticated": "yes",
-#                     "update_cache": "yes",
-#                     "upgrade": "yes"
-#                 }
-#             },
-#             {
-#                 "name": "install mate-desktop",
-#                 "apt": {
-#                     "name": "mate-desktop",
-#                     "state": "installed",
-#                     "allow_unauthenticated": "yes",
-#                     "update_cache": "no"
-#                 }
-#             },
-#             {
-#                 "name": "install x2goserver",
-#                 "apt": {
-#                     "name": "x2goserver",
-#                     "state": "installed",
-#                     "allow_unauthenticated": "yes",
-#                     "update_cache": "no"
-#                 }
-#             },
-#             {
-#                 "name": "install mate-session-manager",
-#                 "apt": {
-#                     "name": "mate-session-manager",
-#                     "state": "installed",
-#                     "allow_unauthenticated": "yes",
-#                     "update_cache": "no"
-#                 }
-#             },
-#             {
-#                 "name": "install mate-applets",
-#                 "apt": {
-#                     "name": "mate-applets",
-#                     "state": "installed",
-#                     "allow_unauthenticated": "yes",
-#                     "update_cache": "no"
-#                 }
-#             },
-#             {
-#                 "name": "install mate-backgrounds",
-#                 "apt": {
-#                     "name": "mate-backgrounds",
-#                     "state": "installed",
-#                     "allow_unauthenticated": "yes",
-#                     "update_cache": "no"
-#                 }
-#             },
-#             {
-#                 "name": "install mate-control-center",
-#                 "apt": {
-#                     "name": "mate-control-center",
-#                     "state": "installed",
-#                     "allow_unauthenticated": "yes",
-#                     "update_cache": "no"
-#                 }
-#             },
-#             {
-#                 "name": "install mate-desktop-environment",
-#                 "apt": {
-#                     "name": "mate-desktop-environment",
-#                     "state": "installed",
-#                     "allow_unauthenticated": "yes",
-#                     "update_cache": "no"
-#                 }
-#             },
-#             {
-#                 "name": "install dconf-cli",
-#                 "apt": {
-#                     "name": "dconf-cli",
-#                     "state": "installed",
-#                     "allow_unauthenticated": "yes",
-#                     "update_cache": "no"
-#                 }
-#             },
-#             {
-#                 "name": "install firefox-esr",
-#                 "apt": {
-#                     "name": "firefox-esr",
-#                     "state": "installed",
-#                     "allow_unauthenticated": "yes",
-#                     "update_cache": "no"
-#                 }
-#             },
-#             {
-#                 "name": "copy check_wallpaper.sh",
-#                 "copy": {
-#                     "src": "./files/check_wallpaper.sh",
-#                     "dest": "/usr/local/bin",
-#                     "mode": "755"
-#                 }
-#             },
-#             {
-#                 "name": "ensure local .config/autostart exists",
-#                 "file": {
-#                     "path": "/home/x2go/.config/autostart",
-#                     "recurse": "yes",
-#                     "state": "directory",
-#                     "owner": "x2go"
-#                 }
-#             },
-#             {
-#                 "name": "copy check_wallpaper.desktop",
-#                 "copy": {
-#                     "src": "./files/check_wallpaper.desktop",
-#                     "dest": "/home/x2go/.config/autostart",
-#                     "owner": "x2go",
-#                     "group": "users"
-#                 }
-#             },
-#             {
-#                 "name": "copy wallpaper.jpg",
-#                 "copy": {
-#                     "src": "./files/wallpaper.jpg",
-#                     "dest": "/home/x2go",
-#                     "owner": "x2go",
-#                     "group": "users"
-#                 }
-#             }
-#         ]
-#     }
-# ]
+    - name: Copy autostart
+      file: 
+        path: /home/x2go/.config/autostart
+        recurse: yes
+        state: directory
+        owner: x2go
+
+    - name: Desktop
+      file:
+        path: /home/x2go/Desktop
+        recurse: yes
+        state: directory
+        owner: x2go
+
+    - name: Copy JMeter.desktop
+      copy: 
+        src: files/JMeter.desktop
+        dest: /home/x2go/Desktop
+        owner: x2go
+        group: users
+
+    - name: Copy check_wallpaper.desktop
+      copy:
+        src: files/check_wallpaper.desktop
+        dest: /home/x2go/.config/autostart
+        owner: x2go
+        group: users
+
+    - name: Copy wallpaper.jpg
+      copy:
+        src: files/wallpaper.jpg
+        dest: /home/x2go
+        owner: x2go
+        group: users
