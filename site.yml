@@ -18,7 +18,7 @@
     - name: Add x2go key
       apt_key:
         id: E1F958385BFE2B6E
-        keyserver: keys.gnupg.net
+        keyserver: keyserver.ubuntu.com
 
     - name: Add x2go repo
       apt_repository: 
