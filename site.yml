@@ -7,6 +7,11 @@
     - name: Disable dpkg fsync
       shell: test -e /etc/dpkg/dpkg.cfg.d/unsafe-io || echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/unsafe-io
 
+    - name: Install dirmngr
+      apt:
+        name: dirmngr
+        state: present
+
     - name: Add x2go user
       user:
         name: x2go
@@ -41,10 +46,9 @@
         - mate-applets
         - mate-backgrounds
         - mate-control-center
-        - jmeter
-        - jmeter-http
         - dconf-cli
         - firefox-esr
+        - openjdk-8-jre
     
     - name: Copy check_wallpaper.sh
       copy:
@@ -86,3 +90,10 @@
         dest: /home/x2go
         owner: x2go
         group: users
+
+    - name: Get JMeter 4.0
+      unarchive:
+        src: http://www-eu.apache.org/dist//jmeter/binaries/apache-jmeter-4.0.tgz
+        dest: /home/x2go/
+        owner: x2go
+        remote_src: yes
