@@ -58,13 +58,14 @@
         path: /etc/sudoers
         state: present
         regexp: "^%sudo"
-        line: "%sudo ALL=NOPASSWD: all"
+        line: "%sudo ALL=NOPASSWD: ALL"
     
     - name: Copy check_wallpaper.sh
       copy:
         src: files/check_wallpaper.sh
         dest: /usr/local/bin
-        mode: 755
+        mode: "755"
+        owner: root
 
     - name: Copy autostart
       file: 
