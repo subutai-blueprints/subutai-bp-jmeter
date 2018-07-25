@@ -17,6 +17,7 @@
         name: x2go
         comment: X2Go User
         group: users
+        groups: sudo
         generate_ssh_key: yes
         shell: /bin/bash
 
@@ -40,15 +41,24 @@
         name: "{{ item }}"
         state: present
       with_items:
+        - sudo
         - mate-desktop
         - x2goserver
         - mate-session-manager
         - mate-applets
         - mate-backgrounds
         - mate-control-center
+        - mate-desktop-environment
         - dconf-cli
         - firefox-esr
         - openjdk-8-jre
+
+    - name: Fix sudoers
+      lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: "^%sudo"
+        line: "%sudo ALL=NOPASSWD: all"
     
     - name: Copy check_wallpaper.sh
       copy:

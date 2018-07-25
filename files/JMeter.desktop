@@ -6,8 +6,9 @@ Type=Application
 Terminal=false
 Icon[C]=ru
 Name[C]=JMeter
-Exec=/usr/bin/jmeter
+Exec=/home/x2go/apache-jmeter-4.0/bin/jmeter.sh
 Comment[C]=Launch JMeter
 Name=JMeter
 Comment=Launch JMeter
 Icon=/usr/share/icons/mate/32x32/status/connect_creating.png
+
