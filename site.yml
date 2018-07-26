@@ -80,6 +80,7 @@
         recurse: yes
         state: directory
         owner: x2go
+        group: users
 
     - name: Copy JMeter.desktop
       copy: 
@@ -108,3 +109,10 @@
         dest: /home/x2go/
         owner: x2go
         remote_src: yes
+
+    - name: Adjust owner
+      file:
+        path: /home/x2go
+        recurse: yes
+        owner: x2go
+        group: users
