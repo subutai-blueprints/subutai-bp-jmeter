@@ -18,7 +18,7 @@
         }
     ],
     "ansible-configuration": {
-        "source-url": "https://github.com/lbthomsen/subutai-bp-jmeter/archive/master.zip",
+        "source-url": "https://github.com/subutai-blueprints/subutai-bp-jmeter/archive/master.zip",
         "ansible-playbook": "site.yml",
         "groups": [
             {
